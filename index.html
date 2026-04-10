@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>展位号查询 - 陕西省2026届外语外贸类招聘会</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  padding: 0;
+}
+.container {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 0 16px 40px;
+}
+.header {
+  text-align: center;
+  padding: 32px 16px 20px;
+  color: #fff;
+}
+.header h1 {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+.header p {
+  font-size: 13px;
+  opacity: 0.85;
+}
+.search-box {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  padding: 12px 0 16px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+.search-inner {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border-radius: 28px;
+  padding: 0 18px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+}
+.search-icon {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  color: #999;
+  margin-right: 10px;
+}
+.search-inner input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 16px;
+  padding: 14px 0;
+  color: #333;
+  background: transparent;
+}
+.search-inner input::placeholder {
+  color: #bbb;
+}
+.clear-btn {
+  display: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #ddd;
+  color: #fff;
+  font-size: 14px;
+  line-height: 22px;
+  text-align: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  margin-left: 8px;
+}
+.clear-btn.show { display: block; }
+.stats {
+  text-align: center;
+  color: rgba(255,255,255,0.9);
+  font-size: 13px;
+  margin-bottom: 16px;
+  padding: 0 8px;
+}
+.results {
+  padding-bottom: 20px;
+}
+.card {
+  background: #fff;
+  border-radius: 14px;
+  padding: 16px 18px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  transition: transform 0.15s;
+  cursor: default;
+}
+.card:active {
+  transform: scale(0.98);
+}
+.booth-badge {
+  flex-shrink: 0;
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  margin-right: 14px;
+}
+.booth-badge .num {
+  font-size: 20px;
+  font-weight: 800;
+  line-height: 1.1;
+}
+.booth-badge .label {
+  font-size: 10px;
+  opacity: 0.8;
+}
+.card-info {
+  flex: 1;
+  min-width: 0;
+}
+.card-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: #222;
+  line-height: 1.4;
+  word-break: break-all;
+}
+.card-name mark {
+  background: #ffeb3b;
+  color: inherit;
+  padding: 0 1px;
+  border-radius: 2px;
+}
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: rgba(255,255,255,0.7);
+}
+.empty-state svg {
+  width: 64px;
+  height: 64px;
+  margin-bottom: 16px;
+  opacity: 0.5;
+}
+.empty-state p {
+  font-size: 15px;
+}
+.tip {
+  text-align: center;
+  color: rgba(255,255,255,0.65);
+  font-size: 12px;
+  padding: 20px;
+}
+/* Animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.card { animation: fadeIn 0.2s ease; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>🏢 展位号查询</h1>
+    <p>陕西省2026届普通高校外语外贸类毕业生联盟招聘会</p>
+  </div>
+  <div class="search-box">
+    <div class="search-inner">
+      <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+      <input type="text" id="searchInput" placeholder="输入单位名称搜索..." autofocus />
+      <div class="clear-btn" id="clearBtn" onclick="clearSearch()">×</div>
+    </div>
+  </div>
+  <div class="stats" id="stats">共 213 家参会单位</div>
+  <div class="results" id="results"></div>
+  <div class="tip">输入关键字即可模糊搜索，支持部分匹配</div>
+</div>
+
+<script>
+const DATA = [{"booth": 1, "name": "中铁十二局四公司"}, {"booth": 2, "name": "中国一拖集团有限公司"}, {"booth": 3, "name": "中国二十二冶集团有限公司"}, {"booth": 4, "name": "中法高速铁路技术（西安）有限公司"}, {"booth": 5, "name": "中建材国际贸易有限公司"}, {"booth": 6, "name": "北汽重型汽车有限公司"}, {"booth": 7, "name": "上汽大通汽车有限公司"}, {"booth": 8, "name": "特变电工集团有限公司"}, {"booth": 9, "name": "特变电工集团衡阳电气分公司"}, {"booth": 10, "name": "特变电工股份有限公司新疆变压器厂"}, {"booth": 11, "name": "特变电工（德阳）电缆股份有限公司"}, {"booth": 12, "name": "中天世贸有限公司"}, {"booth": 13, "name": "尧柏特种水泥集团有限公司"}, {"booth": 14, "name": "厦门国贸集团股份有限公司"}, {"booth": 15, "name": "陕西重型汽车进出口有限公司"}, {"booth": 16, "name": "浙江志高机械股份有限公司"}, {"booth": 17, "name": "浙江伟星新型建材股份有限公司"}, {"booth": 18, "name": "浙江双视科技股份有限公司"}, {"booth": 19, "name": "浙江日井泵业股份有限公司"}, {"booth": 20, "name": "紫光数码（苏州）集团西安分公司"}, {"booth": 21, "name": "郑州郑氏化工产品有限公司"}, {"booth": 22, "name": "中茂绿能科技（西安）有限公司"}, {"booth": 23, "name": "卓力电器集团有限公司"}, {"booth": 24, "name": "西安麦克斯生物科技集团有限公司"}, {"booth": 25, "name": "优护优家健康科技（苏州）有限公司"}, {"booth": 26, "name": "西安知象光电科技有限公司"}, {"booth": 27, "name": "西安宇视信息科技有限公司"}, {"booth": 28, "name": "西安亚购信息科技有限公司"}, {"booth": 29, "name": "西安星光耀养老服务有限公司"}, {"booth": 30, "name": "西安新维禾有机生物科技有限公司"}, {"booth": 31, "name": "西安伍字节信息科技有限公司"}, {"booth": 32, "name": "西安万普进出口贸易有限公司"}, {"booth": 33, "name": "西安抟扶摇网络科技有限公司"}, {"booth": 34, "name": "西安太捷国际物流有限公司"}, {"booth": 35, "name": "西安水豚科技有限公司"}, {"booth": 36, "name": "西安神秘现象服装有限公司"}, {"booth": 37, "name": "西安赛格商业运营管理有限公司"}, {"booth": 38, "name": "西安庆安智航通用设备有限公司"}, {"booth": 39, "name": "西安湃秦进出口贸易有限责任公司"}, {"booth": 40, "name": "西安乐行文化传播有限公司"}, {"booth": 41, "name": "西安凯翔光电科技有限公司"}, {"booth": 42, "name": "西安佳音文化传播有限公司"}, {"booth": 43, "name": "西安回声国际进出口贸易有限责任公司"}, {"booth": 44, "name": "西安航空发动机微电子有限公司"}, {"booth": 45, "name": "西安国晟健康科技有限公司"}, {"booth": 47, "name": "西安大船团科技有限公司"}, {"booth": 48, "name": "西安成翔商贸有限公司"}, {"booth": 50, "name": "苏州工业园区若态科技有限公司"}, {"booth": 51, "name": "四川语言桥信息技术有限公司"}, {"booth": 52, "name": "四川邦泰投资集团有限责任公司"}, {"booth": 53, "name": "盛森信息技术（西安）有限公司"}, {"booth": 54, "name": "沈阳宏远电磁线股份有限公司"}, {"booth": 55, "name": "深圳市欣达兴电子科技有限公司"}, {"booth": 56, "name": "深圳市法本信息技术股份有限公司西安分公司"}, {"booth": 57, "name": "深圳市澳威企业管理咨询有限责任公司"}, {"booth": 58, "name": "上海壹米滴答快运有限公司"}, {"booth": 59, "name": "上海蓝海人力资源科技股份有限公司"}, {"booth": 60, "name": "旷世传声传媒科技集团有限责任公司"}, {"booth": 61, "name": "上海佳农云果科技有限公司"}, {"booth": 62, "name": "熵基科技股份有限公司"}, {"booth": 63, "name": "陕西中众进出口有限公司"}, {"booth": 64, "name": "陕西赢途供应链管理有限公司"}, {"booth": 65, "name": "陕西薪火网络科技有限公司"}, {"booth": 66, "name": "陕西硒谷产业发展有限公司"}, {"booth": 67, "name": "陕西苏宁易购销售有限公司"}, {"booth": 68, "name": "陕西群体涌现电梯集团有限公司"}, {"booth": 69, "name": "陕西量维生物工程有限公司"}, {"booth": 70, "name": "陕西九州生物医药科技集团有限公司"}, {"booth": 71, "name": "陕西捷航货运信息咨询有限责任公司"}, {"booth": 72, "name": "陕西华山路桥集团有限公司"}, {"booth": 73, "name": "陕西航星数科信息技术有限公司"}, {"booth": 74, "name": "陕西达利食品有限公司"}, {"booth": 75, "name": "陕西北人印刷机械有限责任公司"}, {"booth": 76, "name": "陕汽集团商用车有限公司"}, {"booth": 77, "name": "西安悦木未来文化传媒有限责任公司"}, {"booth": 78, "name": "山东鑫昇源化纤绳网有限公司"}, {"booth": 79, "name": "山东百丞税务服务股份有限公司"}, {"booth": 80, "name": "荣禾投资（集团）有限公司"}, {"booth": 81, "name": "宁波东方威尔进出口有限公司"}, {"booth": 82, "name": "宁波安可佳科技集团有限公司"}, {"booth": 83, "name": "玫德集团有限公司"}, {"booth": 84, "name": "麦克传感器股份有限公司"}, {"booth": 85, "name": "洛阳北方易初摩托车有限公司"}, {"booth": 86, "name": "利欧集团股份有限公司"}, {"booth": 87, "name": "开沃新能源汽车集团股份有限公司"}, {"booth": 88, "name": "菁与珩未来（成都）科技有限公司"}, {"booth": 89, "name": "江苏省中江海外进出口有限公司"}, {"booth": 90, "name": "加西亚电子电器股份有限公司"}, {"booth": 91, "name": "寰宇义嘉国际物流（北京）有限公司"}, {"booth": 92, "name": "华唐尚诚（陕西）信息技术有限公司"}, {"booth": 93, "name": "湖南驻外之家信息科技有限公司"}, {"booth": 94, "name": "河南国基实业集团有限公司"}, {"booth": 95, "name": "河北物流集团金属材料有限公司"}, {"booth": 96, "name": "福州译国译民集团有限公司"}, {"booth": 97, "name": "飞亚达精密科技股份有限公司"}, {"booth": 98, "name": "迪卡侬（西安）体育用品有限公司"}, {"booth": 99, "name": "贝德服装集团股份有限公司"}, {"booth": 100, "name": "北京科锐国际人力资源股份有限公司西安分公司"}, {"booth": 101, "name": "兰州工商学院"}, {"booth": 102, "name": "渭南市临渭区示范学校"}, {"booth": 103, "name": "延安育英中学"}, {"booth": 104, "name": "杨凌衡水实验中学"}, {"booth": 105, "name": "南宫市私立丰翼中学"}, {"booth": 106, "name": "山阳高新中学有限公司"}, {"booth": 107, "name": "韩城市桢州初级中学"}, {"booth": 108, "name": "宝鸡智博学校"}, {"booth": 109, "name": "作业帮教育科技（北京）有限公司"}, {"booth": 110, "name": "新东方彼岸（北京）教育科技有限公司"}, {"booth": 111, "name": "咸阳学于思教育科技有限公司"}, {"booth": 112, "name": "咸阳秦都新视野教育培训学校有限公司"}, {"booth": 113, "name": "西安英之杰英语培训学校有限公司"}, {"booth": 114, "name": "西安新起航至美教育科技有限公司"}, {"booth": 115, "name": "西安西补教育培训学校有限责任公司"}, {"booth": 116, "name": "西安市长安区新兴邦艺术培训学校有限公司"}, {"booth": 117, "name": "西安市灞桥区大奔高考补习学校"}, {"booth": 118, "name": "西安卡睿森英语培训学校有限责任公司"}, {"booth": 119, "name": "西安工业经济综合职业高中"}, {"booth": 120, "name": "西安高新前景教育咨询管理有限公司"}, {"booth": 121, "name": "西安高途教育科技有限公司"}, {"booth": 122, "name": "西安博硕培训学校有限公司"}, {"booth": 123, "name": "西安爱师未来科技有限公司"}, {"booth": 124, "name": "上海闵行区锦书在线培训学校"}, {"booth": 125, "name": "上海长宁区乐读线上教育培训学校"}, {"booth": 126, "name": "陕西臻美品学教育科技有限公司"}, {"booth": 127, "name": "陕西学优而优教育科技有限责任公司"}, {"booth": 128, "name": "陕西学大信息技术有限公司"}, {"booth": 129, "name": "陕西新致教育信息化研究院有限公司"}, {"booth": 130, "name": "陕西向桂教育科技有限公司"}, {"booth": 131, "name": "陕西豆神教育科技有限责任公司"}, {"booth": 132, "name": "汉和文化科技（深圳）有限公司西安分公司"}, {"booth": 133, "name": "广州知贤道远信息服务有限公司西安分公司"}, {"booth": 134, "name": "广州市卓越里程教育科技有限公司"}, {"booth": 135, "name": "成都法亚教育服务有限责任公司"}, {"booth": 136, "name": "北京学思合一科技有限公司"}, {"booth": 137, "name": "北京学而思教育科技有限公司西安分公司"}, {"booth": 138, "name": "北京学而思教育科技有限公司"}, {"booth": 139, "name": "北京粉笔天下教育科技有限公司西安分公司"}, {"booth": 140, "name": "西安莲湖心田花开培训中心"}, {"booth": 141, "name": "深圳市中兴新云服务有限公司"}, {"booth": 142, "name": "北京中公教育科技有限公司陕西分公司"}, {"booth": 143, "name": "西安文鳐网络信息科技有限责任公司"}, {"booth": 144, "name": "圆通科技股份有限公司"}, {"booth": 145, "name": "达刚控股集团股份有限公司"}, {"booth": 146, "name": "河南骏通车辆有限公司"}, {"booth": 147, "name": "北京欣赛福国际货运代理有限公司西安分公司"}, {"booth": 148, "name": "西安欣玮商贸有限公司"}, {"booth": 149, "name": "鲨鱼引擎（西安网络科技有限公司）"}, {"booth": 150, "name": "学霸星（陕西）科技有限公司"}, {"booth": 151, "name": "西安安德锦业科技发展有限公司"}, {"booth": 152, "name": "陕西宏达天源生物化工有限公司"}, {"booth": 153, "name": "西安法斯拓进出口有限公司"}, {"booth": 154, "name": "上海荣誉国际货运代理有限公司西安分公司"}, {"booth": 155, "name": "广州集泰化工股份有限公司"}, {"booth": 156, "name": "陕西康明乳业科技有限公司"}, {"booth": 157, "name": "陕西华泰生物精细化工有限公司"}, {"booth": 158, "name": "西安市新城区正大补习学校"}, {"booth": 159, "name": "西安汉翔信息科技服务有限公司"}, {"booth": 160, "name": "西安碑林区新曙光培训学校有限公司"}, {"booth": 161, "name": "绿能慧充数字技术有限公司"}, {"booth": 162, "name": "西安合电电气有限公司"}, {"booth": 163, "name": "西安佳音美学至美文化传播有限公司"}, {"booth": 164, "name": "西安百进联电子科技有限公司"}, {"booth": 165, "name": "西安航澄商贸有限公司"}, {"booth": 166, "name": "陕西亨德国际供应链管理有限公司"}, {"booth": 167, "name": "西安碑林佰视佳眼科门诊部有限公司"}, {"booth": 168, "name": "陕西易美旅游股份有限公司"}, {"booth": 169, "name": "陕西格力恒信冰洗贸易有限公司"}, {"booth": 170, "name": "西安阳光美语艺术培训学校有限公司"}, {"booth": 171, "name": "西安博君思图文广告传媒有限公司"}, {"booth": 172, "name": "西安外事技工学校"}, {"booth": 173, "name": "陕西丹美科建工实业有限公司"}, {"booth": 174, "name": "西安学蜗教育科技有限公司"}, {"booth": 175, "name": "西安永兴科技发展有限公司"}, {"booth": 176, "name": "深圳万邦宏盛矿业有限公司"}, {"booth": 177, "name": "玖鼎筑家装饰西安分公司"}, {"booth": 178, "name": "武汉天童素质教育成长中心"}, {"booth": 179, "name": "中粮可口可乐饮料（陕西）有限公司"}, {"booth": 180, "name": "西安彼芯教育科技有限公司"}, {"booth": 181, "name": "陕西海贝莱福进出口有限公司"}, {"booth": 182, "name": "陕西睿创电子科技有限公司"}, {"booth": 183, "name": "安徽云枢智航科技有限公司"}, {"booth": 184, "name": "开源证券股份有限公司"}, {"booth": 185, "name": "浦发银行西安分行"}, {"booth": 186, "name": "辉智（陕西）教育科技有限公司"}, {"booth": 187, "name": "陕西维妮卫生用品有限公司"}, {"booth": 188, "name": "陕西第七工坊文化传媒有限公司"}, {"booth": 189, "name": "陕西诺亚外语培训学校"}, {"booth": 190, "name": "陕西启智教育科技有限公司"}, {"booth": 191, "name": "陕西新途径教育科技有限公司"}, {"booth": 192, "name": "西安承悦科技有限公司"}, {"booth": 193, "name": "陕西飞鲸网络科技有限公司"}, {"booth": 194, "name": "国泰海通证券股份有限公司陕西分公司"}, {"booth": 195, "name": "陕西新才网络技术股份有限公司"}, {"booth": 196, "name": "西安乐奕文化娱乐有限公司"}, {"booth": 197, "name": "商洛品格文化艺术传媒有限公司"}, {"booth": 198, "name": "陕西翰林教育研究院"}, {"booth": 199, "name": "西安奥威有机科技有限责任公司"}, {"booth": 200, "name": "西安贝诺茵电子科技有限公司"}, {"booth": 201, "name": "陕西晟大装饰设计有限公司"}, {"booth": 202, "name": "西安瑞沥普网络科技有限公司"}, {"booth": 203, "name": "西安爱德克美新材料有限公司"}, {"booth": 204, "name": "西安睿恩文化艺术有限责任公司"}, {"booth": 205, "name": "易点天下网络科技股份有限公司"}, {"booth": 206, "name": "作业帮教育（北京）科技有限公司"}, {"booth": 207, "name": "陕西顾德企业管理咨询有限公司"}, {"booth": 208, "name": "陕西德闻科贸有限公司"}, {"booth": 209, "name": "陕西金宇航空科技有限公司"}, {"booth": 210, "name": "高途云集艺术培训学校"}, {"booth": 211, "name": "西安睿格进出口有限公司"}, {"booth": 212, "name": "西安天晟趣捷网络科技有限公司"}, {"booth": 213, "name": "咸阳萨尼威尔苹果制品有限公司"}, {"booth": 214, "name": "西安金莱福食品有限责任公司"}, {"booth": 215, "name": "山东信恒教育科技有限公司陕西分公司"}];
+
+const input = document.getElementById('searchInput');
+const clearBtn = document.getElementById('clearBtn');
+const results = document.getElementById('results');
+const stats = document.getElementById('stats');
+
+function highlight(text, query) {
+  if (!query) return text;
+  const idx = text.toLowerCase().indexOf(query.toLowerCase());
+  if (idx === -1) return text;
+  return text.substring(0, idx) + '<mark>' + text.substring(idx, idx + query.length) + '</mark>' + text.substring(idx + query.length);
+}
+
+function render(list, query) {
+  if (list.length === 0) {
+    results.innerHTML = '<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="8" y1="8" x2="14" y2="14" stroke-dasharray="3 3"/></svg><p>没有找到匹配的单位</p></div>';
+    stats.textContent = '未找到匹配结果';
+    return;
+  }
+  stats.textContent = query ? '找到 ' + list.length + ' 个匹配结果' : '共 ' + list.length + ' 家参会单位';
+  results.innerHTML = list.map(item => `
+    <div class="card">
+      <div class="booth-badge">
+        <span class="num">${item.booth}</span>
+        <span class="label">展位号</span>
+      </div>
+      <div class="card-info">
+        <div class="card-name">${highlight(item.name, query)}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function search() {
+  const q = input.value.trim();
+  clearBtn.className = q ? 'clear-btn show' : 'clear-btn';
+  if (!q) {
+    render(DATA, '');
+    return;
+  }
+  const filtered = DATA.filter(item => item.name.toLowerCase().includes(q.toLowerCase()) || String(item.booth).includes(q));
+  render(filtered, q);
+}
+
+function clearSearch() {
+  input.value = '';
+  clearBtn.className = 'clear-btn';
+  render(DATA, '');
+  input.focus();
+}
+
+input.addEventListener('input', search);
+
+// Initial render
+render(DATA, '');
+</script>
+</body>
+</html>
